@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj ogłoszenie</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+</head>
+<body class="bg-light">
+{% include "nav_seller.html" %}
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h2 class="mb-4">Dodaj ogłoszenie samochodu</h2>
+
+            <form method="post"
+                  action="/seller/car/add"
+                  enctype="multipart/form-data"
+                  id="carForm">
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Tytuł</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Cena (PLN)</label>
+                        <input type="number" name="price" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Rok</label>
+                        <input type="number" name="year" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Przebieg (km)</label>
+                        <input type="number" name="mileage" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Paliwo</label>
+                        <select name="fuel" class="form-select">
+                            <option>Benzyna</option>
+                            <option>Diesel</option>
+                            <option>Hybryda</option>
+                            <option>Elektryczny</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Marka</label>
+                        <input type="text" name="brand" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Model</label>
+                        <input type="text" name="model" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Pojemność silnika</label>
+                        <input type="text" name="engine" class="form-control">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Opis</label>
+                        <textarea name="description" rows="4" class="form-control"></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Zdjęcie</label>
+                        <input
+                            type="file"
+                            name="images"
+                            id="imagesInput"
+                            class="form-control"
+                            multiple
+                            accept="image/*"
+                        >
+                    </div>
+
+                </div>
+
+                <!-- PODGLĄD ZDJĘĆ -->
+                <div class="mt-4">
+                    <h6>Podgląd zdjęcia</h6>
+                    <div id="preview" class="d-flex flex-wrap gap-3"></div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Dodaj ogłoszenie
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+const input = document.getElementById("imagesInput");
+const preview = document.getElementById("preview");
+
+input.addEventListener("change", () => {
+    preview.innerHTML = "";
+
+    Array.from(input.files).forEach((file, index) => {
+        const reader = new FileReader();
+
+        reader.onload = e => {
+            const div = document.createElement("div");
+            div.className = "position-relative";
+
+            div.innerHTML = `
+                <img src="${e.target.result}"
+                     class="rounded shadow"
+                     style="width:150px;height:100px;object-fit:cover;">
+                ${index === 0 ? `
+                    <span class="badge bg-success position-absolute top-0 start-0 m-1">
+                        Główne
+                    </span>` : ""}
+            `;
+
+            preview.appendChild(div);
+        };
+
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+</body>
+</html>
