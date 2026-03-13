@@ -30,7 +30,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # ------------------------
 # BAZA DANYCH
 # ------------------------
-DATABASE_URL = "mysql+pymysql://root:B%40rtek03@localhost:3306/komis"
+DATABASE_URL = "mysql+pymysql://bartek:mojehaslo@mariadb-db:3306/auto_komis"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
