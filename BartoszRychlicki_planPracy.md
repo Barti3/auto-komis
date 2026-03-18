@@ -4,7 +4,7 @@
 ## Zespół: Bartosz Rychlicki, Fabian Popielewski, Grupa 2
 
 # Cel projektu:
-### Celem projektu jest rozwinięcie istniejącej aplikacji serwisu auto-komisunapisanej w technologii FastAPI poprzez przygotowanie środowiskauruchomieniowego opartego na kontenerach Docker  i automatyzacji procesu budowania oraz testowania aplikacji.
+### Celem projektu jest rozwinięcie istniejącej aplikacji serwisu auto-komisu napisanej w technologii FastAPI poprzez przygotowanie środowiska uruchomieniowego opartego na kontenerach Docker  i automatyzacji procesu budowania oraz testowania aplikacji.
 
 # Zakres projektu:
 ## Projekt obejmuje następujące elementy:
