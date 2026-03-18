@@ -1,6 +1,5 @@
 # Temat projektu: 
 ## Konteneryzacja i automatyzacja wdrażania aplikacji webowej z wykorzystaniem Docker, RabbitMQ oraz PyTest
-## Aplikacja auto-komisu jako mikroserwisy
 
 ## Zespół: Bartosz Rychlicki, Fabian Popielewski, Grupa 2
 
@@ -28,7 +27,6 @@
 - implementacja komunikacji asynchronicznej
 - stworzenie procesu typu worker do obsługi komunikatów
 7. Automatyzacja (Jenkins)???
-- konfiguracja serwera Jenkins w kontenerze
 - przygotowanie pipeline CI obejmującego:
   - budowanie obrazów Docker
   - uruchamianie aplikacji
