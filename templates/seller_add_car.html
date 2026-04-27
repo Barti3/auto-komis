@@ -4,95 +4,120 @@
     <meta charset="UTF-8">
     <title>Dodaj ogłoszenie</title>
 
-    <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
 {% include "nav_seller.html" %}
+
 <div class="container my-5">
     <div class="card shadow-sm">
         <div class="card-body">
 
             <h2 class="mb-4">Dodaj ogłoszenie samochodu</h2>
 
-            <form method="post"
-                  action="/seller/car/add"
-                  enctype="multipart/form-data"
-                  id="carForm">
+            <form method="post" action="/seller/car/add" enctype="multipart/form-data">
 
                 <div class="row g-3">
 
+                    <!-- TYTUŁ -->
                     <div class="col-md-6">
                         <label class="form-label">Tytuł</label>
                         <input type="text" name="title" class="form-control" required>
                     </div>
 
+                    <!-- CENA -->
                     <div class="col-md-6">
                         <label class="form-label">Cena (PLN)</label>
-                        <input type="number" name="price" class="form-control" required>
+                        <input type="number" name="price" class="form-control" min="0" required>
                     </div>
 
-                    <div class="col-md-4">
+                    <!-- ROK -->
+                    <div class="col-md-3">
                         <label class="form-label">Rok</label>
-                        <input type="number" name="year" class="form-control" required>
+                        <input type="number" name="year" class="form-control" min="1900" required>
                     </div>
 
-                    <div class="col-md-4">
+                    <!-- PRZEBIEG -->
+                    <div class="col-md-3">
                         <label class="form-label">Przebieg (km)</label>
-                        <input type="number" name="mileage" class="form-control" required>
+                        <input type="number" name="mileage" class="form-control" min="0" required>
                     </div>
 
-                    <div class="col-md-4">
+                    <!-- PALIWO -->
+                    <div class="col-md-3">
                         <label class="form-label">Paliwo</label>
-                        <select name="fuel" class="form-select">
-                            <option>Benzyna</option>
-                            <option>Diesel</option>
-                            <option>Hybryda</option>
-                            <option>Elektryczny</option>
+                        <select name="fuel" class="form-select" required>
+                            <option value="Benzyna">Benzyna</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Hybryda">Hybryda</option>
+                            <option value="Elektryczny">Elektryczny</option>
                         </select>
                     </div>
 
+                    <!-- STAN -->
+                    <div class="col-md-3">
+                        <label class="form-label">Stan pojazdu</label>
+                        <select name="condition" class="form-select" required>
+                            <option value="Używany">Używany</option>
+                            <option value="Nowy">Nowy</option>
+                            <option value="Uszkodzony">Uszkodzony</option>
+                        </select>
+                    </div>
+
+                    <!-- MARKA -->
                     <div class="col-md-6">
                         <label class="form-label">Marka</label>
-                        <input type="text" name="brand" class="form-control" required>
+
+                        <select name="brand" id="brandSelect" class="form-select" required>
+                            <option value="" disabled selected>Wybierz markę...</option>
+                            <option value="Inna">Inna (wpiszę ręcznie)</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                        </select>
+
+                        <input type="text"
+                               id="customBrandInput"
+                               class="form-control mt-2 d-none"
+                               placeholder="Wpisz markę ręcznie..."
+                               disabled>
                     </div>
 
+                    <!-- MODEL -->
                     <div class="col-md-6">
                         <label class="form-label">Model</label>
-                        <input type="text" name="model" class="form-control" required>
+
+                        <select id="modelSelect" class="form-select" required>
+                            <option value="" disabled selected>Najpierw wybierz markę</option>
+                        </select>
+
+                        <input type="text"
+                               id="modelInput"
+                               class="form-control d-none mt-2"
+                               placeholder="Wpisz model ręcznie..."
+                               disabled>
                     </div>
 
+                    <!-- SILNIK -->
                     <div class="col-md-6">
-                        <label class="form-label">Pojemność silnika</label>
-                        <input type="text" name="engine" class="form-control">
+                        <label class="form-label">Pojemność silnika (cm³)</label>
+                        <input type="number" name="engine" class="form-control" min="0">
                     </div>
 
+                    <!-- OPIS -->
                     <div class="col-12">
                         <label class="form-label">Opis</label>
                         <textarea name="description" rows="4" class="form-control"></textarea>
                     </div>
 
+                    <!-- ZDJĘCIA -->
                     <div class="col-12">
-                        <label class="form-label">Zdjęcie</label>
-                        <input
-                            type="file"
-                            name="images"
-                            id="imagesInput"
-                            class="form-control"
-                            multiple
-                            accept="image/*"
-                        >
+                        <label class="form-label">Zdjęcia</label>
+                        <input type="file" name="images" class="form-control" multiple accept="image/*">
                     </div>
 
-                </div>
-
-                <!-- PODGLĄD ZDJĘĆ -->
-                <div class="mt-4">
-                    <h6>Podgląd zdjęcia</h6>
-                    <div id="preview" class="d-flex flex-wrap gap-3"></div>
                 </div>
 
                 <div class="mt-4">
@@ -107,34 +132,68 @@
 </div>
 
 <script>
-const input = document.getElementById("imagesInput");
-const preview = document.getElementById("preview");
+const carModels = {
+    "BMW": ["Seria 1", "Seria 3", "X5"],
+    "Audi": ["A3", "A4", "A6"],
+    "Toyota": ["Corolla", "Yaris", "RAV4"],
+    "Volkswagen": ["Golf", "Passat", "Tiguan"]
+};
 
-input.addEventListener("change", () => {
-    preview.innerHTML = "";
+const brandSelect = document.getElementById("brandSelect");
+const customBrandInput = document.getElementById("customBrandInput");
 
-    Array.from(input.files).forEach((file, index) => {
-        const reader = new FileReader();
+const modelSelect = document.getElementById("modelSelect");
+const modelInput = document.getElementById("modelInput");
 
-        reader.onload = e => {
-            const div = document.createElement("div");
-            div.className = "position-relative";
+brandSelect.addEventListener("change", () => {
+    const brand = brandSelect.value;
 
-            div.innerHTML = `
-                <img src="${e.target.result}"
-                     class="rounded shadow"
-                     style="width:150px;height:100px;object-fit:cover;">
-                ${index === 0 ? `
-                    <span class="badge bg-success position-absolute top-0 start-0 m-1">
-                        Główne
-                    </span>` : ""}
-            `;
+    // RESET
+    modelSelect.innerHTML = "";
+    modelSelect.disabled = false;
 
-            preview.appendChild(div);
-        };
+    // INNA MARKA
+    if (brand === "Inna") {
+        brandSelect.removeAttribute("name");
 
-        reader.readAsDataURL(file);
-    });
+        customBrandInput.classList.remove("d-none");
+        customBrandInput.disabled = false;
+        customBrandInput.setAttribute("name", "brand");
+
+        modelSelect.classList.add("d-none");
+        modelSelect.removeAttribute("name");
+
+        modelInput.classList.remove("d-none");
+        modelInput.disabled = false;
+        modelInput.setAttribute("name", "model");
+
+        return;
+    }
+
+    // NORMALNA MARKA
+    brandSelect.setAttribute("name", "brand");
+
+    customBrandInput.classList.add("d-none");
+    customBrandInput.disabled = true;
+    customBrandInput.removeAttribute("name");
+
+    modelInput.classList.add("d-none");
+    modelInput.disabled = true;
+    modelInput.removeAttribute("name");
+
+    modelSelect.classList.remove("d-none");
+    modelSelect.setAttribute("name", "model");
+
+    modelSelect.innerHTML = '<option disabled selected>Wybierz model...</option>';
+
+    if (carModels[brand]) {
+        carModels[brand].forEach(m => {
+            const opt = document.createElement("option");
+            opt.value = m;
+            opt.textContent = m;
+            modelSelect.appendChild(opt);
+        });
+    }
 });
 </script>
 

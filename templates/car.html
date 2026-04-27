@@ -156,6 +156,18 @@
         <p><strong>Rok:</strong> {{ car.year }}</p>
         <p><strong>Przebieg:</strong> {{ car.mileage }} km</p>
         <p><strong>Paliwo:</strong> {{ car.fuel }}</p>
+    <p>
+        <strong>Stan:</strong>
+        {% if car.condition == "Nowy" %}
+            <span class="badge bg-success">Nowy</span>
+        {% elif car.condition == "Używany" %}
+            <span class="badge bg-primary">Używany</span>
+        {% elif car.condition == "Uszkodzony" %}
+            <span class="badge bg-danger">Uszkodzony</span>
+        {% else %}
+            <span class="badge bg-secondary">{{ car.condition }}</span>
+        {% endif %}
+    </p>
         <p><strong>Silnik:</strong> {{ car.engine }}</p>
         <p><strong>Cena:</strong> {{ car.price }} zł</p>
         <p><strong>Opis:</strong> {{ car.description }}</p>

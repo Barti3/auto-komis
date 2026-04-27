@@ -1,4 +1,4 @@
-version: "3.3"
+version: "3.9"
 
 services:
 
@@ -17,17 +17,6 @@ services:
     ports:
       - "3306:3306"
 
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    restart: always
-    ports:
-      - "5672:5672"     # komunikacja aplikacji
-      - "15672:15672"   # panel webowy
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
-
   fastapi:
     build:
       context: .
@@ -36,30 +25,10 @@ services:
     restart: always
     depends_on:
       - mariadb
-      - rabbitmq
     volumes:
       - .:/app
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: mysql+pymysql://bartek:mojehaslo@mariadb:3306/auto_komis
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
-
-  consumer:
-    build:
-      context: .
-      dockerfile: dockerfile.dev
-    container_name: rabbit-consumer
-    restart: always
-    depends_on:
-      - rabbitmq
-      - mariadb
-    command: python consumer.py
-    volumes:
-      - .:/app
-    environment:
-      DATABASE_URL: mysql+pymysql://bartek:mojehaslo@mariadb:3306/auto_komis
-      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
 
   nginx:
     image: nginx:stable

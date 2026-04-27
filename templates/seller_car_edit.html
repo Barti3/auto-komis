@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <title>Edytuj ogłoszenie</title>
 
-    <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
+{% include "nav_seller.html" %}
 
 <div class="container my-5">
     <div class="card shadow-sm">
@@ -20,8 +18,7 @@
 
             <form method="post"
                   action="/seller/car/{{ car.id }}/edit"
-                  enctype="multipart/form-data"
-                  id="carForm">
+                  enctype="multipart/form-data">
 
                 <div class="row g-3">
 
@@ -31,21 +28,21 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Cena (PLN)</label>
+                        <label class="form-label">Cena</label>
                         <input type="number" name="price" class="form-control" required value="{{ car.price }}">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Rok</label>
                         <input type="number" name="year" class="form-control" required value="{{ car.year }}">
                     </div>
 
-                    <div class="col-md-4">
-                        <label class="form-label">Przebieg (km)</label>
+                    <div class="col-md-3">
+                        <label class="form-label">Przebieg</label>
                         <input type="number" name="mileage" class="form-control" required value="{{ car.mileage }}">
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Paliwo</label>
                         <select name="fuel" class="form-select">
                             <option {% if car.fuel == "Benzyna" %}selected{% endif %}>Benzyna</option>
@@ -55,65 +52,128 @@
                         </select>
                     </div>
 
+                    <!-- CONDITION -->
+                    <div class="col-md-3">
+                        <label class="form-label">Stan</label>
+                        <select name="condition" class="form-select" required>
+                            <option value="Nowy" {% if car.condition == "Nowy" %}selected{% endif %}>Nowy</option>
+                            <option value="Używany" {% if car.condition == "Używany" %}selected{% endif %}>Używany</option>
+                            <option value="Uszkodzony" {% if car.condition == "Uszkodzony" %}selected{% endif %}>Uszkodzony</option>
+                        </select>
+                    </div>
+
+                    <!-- BRAND -->
                     <div class="col-md-6">
                         <label class="form-label">Marka</label>
-                        <input type="text" name="brand" class="form-control" required value="{{ car.brand }}">
+
+                        <select id="brandSelect" class="form-select" required>
+                            <option value="" disabled selected>Wybierz markę...</option>
+                            <option value="Inna" class="fw-bold text-primary">Inna (wpiszę ręcznie)</option>
+                            
+                            <option value="Abarth">Abarth</option>
+                            <option value="Acura">Acura</option>
+                            <option value="Alfa Romeo">Alfa Romeo</option>
+                            <option value="Aston Martin">Aston Martin</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Bentley">Bentley</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Bugatti">Bugatti</option>
+                            <option value="Buick">Buick</option>
+                            <option value="Cadillac">Cadillac</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="Chrysler">Chrysler</option>
+                            <option value="Citroen">Citroën</option>
+                            <option value="Cupra">Cupra</option>
+                            <option value="Dacia">Dacia</option>
+                            <option value="Dodge">Dodge</option>
+                            <option value="DS Automobiles">DS Automobiles</option>
+                            <option value="Ferrari">Ferrari</option>
+                            <option value="Fiat">Fiat</option>
+                            <option value="Ford">Ford</option>
+                            <option value="GMC">GMC</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Hyundai">Hyundai</option>
+                            <option value="Infiniti">Infiniti</option>
+                            <option value="Isuzu">Isuzu</option>
+                            <option value="Jaguar">Jaguar</option>
+                            <option value="Jeep">Jeep</option>
+                            <option value="Kia">Kia</option>
+                            <option value="Lada">Lada</option>
+                            <option value="Lamborghini">Lamborghini</option>
+                            <option value="Lancia">Lancia</option>
+                            <option value="Land Rover">Land Rover</option>
+                            <option value="Lexus">Lexus</option>
+                            <option value="Lincoln">Lincoln</option>
+                            <option value="Maserati">Maserati</option>
+                            <option value="Maybach">Maybach</option>
+                            <option value="Mazda">Mazda</option>
+                            <option value="McLaren">McLaren</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="MG">MG</option>
+                            <option value="MINI">MINI</option>
+                            <option value="Mitsubishi">Mitsubishi</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Opel">Opel</option>
+                            <option value="Peugeot">Peugeot</option>
+                            <option value="Polestar">Polestar</option>
+                            <option value="Porsche">Porsche</option>
+                            <option value="RAM">RAM</option>
+                            <option value="Renault">Renault</option>
+                            <option value="Rolls-Royce">Rolls-Royce</option>
+                            <option value="Saab">Saab</option>
+                            <option value="Seat">SEAT</option>
+                            <option value="Skoda">Skoda</option>
+                            <option value="Smart">Smart</option>
+                            <option value="SsangYong">SsangYong</option>
+                            <option value="Subaru">Subaru</option>
+                            <option value="Suzuki">Suzuki</option>
+                            <option value="Tesla">Tesla</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Volvo">Volvo</option>                        
+                        </select>
+
+                        <input type="text"
+                               id="customBrandInput"
+                               class="form-control mt-2 d-none"
+                               value="{{ car.brand }}"
+                               placeholder="Wpisz markę..."
+                               disabled>
                     </div>
 
+                    <!-- MODEL -->
                     <div class="col-md-6">
                         <label class="form-label">Model</label>
-                        <input type="text" name="model" class="form-control" required value="{{ car.model }}">
+
+                        <select id="modelSelect" class="form-select"></select>
+
+                        <input type="text"
+                               id="modelInput"
+                               class="form-control mt-2 d-none"
+                               value="{{ car.model }}"
+                               placeholder="Wpisz model..."
+                               disabled>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label">Pojemność silnika</label>
+                        <label class="form-label">Silnik</label>
                         <input type="text" name="engine" class="form-control" value="{{ car.engine }}">
                     </div>
 
                     <div class="col-12">
                         <label class="form-label">Opis</label>
-                        <textarea name="description" rows="4" class="form-control">{{ car.description }}</textarea>
+                        <textarea name="description" class="form-control">{{ car.description }}</textarea>
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label">Dodaj nowe zdjęcia (max 50)</label>
-                        <input
-                            type="file"
-                            name="images"
-                            id="imagesInput"
-                            class="form-control"
-                            multiple
-                            accept="image/*"
-                        >
+                        <label class="form-label">Dodaj zdjęcia</label>
+                        <input type="file" name="images" class="form-control" multiple>
                     </div>
 
                 </div>
 
-                <!-- PODGLĄD ISTNIEJĄCYCH ZDJĘĆ -->
                 <div class="mt-4">
-                    <h6>Istniejące zdjęcia</h6>
-                    <div id="existingPhotos" class="d-flex flex-wrap gap-3">
-                        {% for img in car.images %}
-                        <div class="position-relative">
-                            <img src="{{ '/static/uploads/' + img.filename }}"
-                                 class="rounded shadow"
-                                 style="width:150px;height:100px;object-fit:cover;">
-                            {% if img.is_main %}
-                            <span class="badge bg-success position-absolute top-0 start-0 m-1">Główne</span>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <!-- PODGLĄD NOWYCH ZDJĘĆ -->
-                <div class="mt-4">
-                    <h6>Nowe zdjęcia do dodania</h6>
-                    <div id="preview" class="d-flex flex-wrap gap-3"></div>
-                </div>
-
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Zapisz zmiany</button>
+                    <button class="btn btn-primary btn-lg">Zapisz</button>
                     <a href="/cars" class="btn btn-secondary btn-lg">Anuluj</a>
                 </div>
 
@@ -123,25 +183,137 @@
 </div>
 
 <script>
-const input = document.getElementById("imagesInput");
-const preview = document.getElementById("preview");
+const carModels = {
+        "Abarth": ["500", "595", "695", "124 Spider"],
+        "Acura": ["ILX", "MDX", "NSX", "RDX", "TLX"],
+        "Alfa Romeo": ["Giulia", "Stelvio", "Tonale", "Mito", "Giulietta"],
+        "Aston Martin": ["DB11", "DBX", "Vantage", "DBS Superleggera"],
+        "Audi": ["A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8", "e-tron", "TT"],
+        "Bentley": ["Bentayga", "Continental GT", "Flying Spur"],
+        "BMW": ["Seria 1", "Seria 2", "Seria 3", "Seria 4", "Seria 5", "Seria 7", "Seria 8", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "i3", "i4", "iX"],
+        "Chevrolet": ["Camaro", "Corvette", "Cruze", "Malibu", "Silverado", "Spark", "Tahoe", "Trax"],
+        "Chrysler": ["300", "Pacifica", "Voyager"],
+        "Citroën": ["C3", "C3 Aircross", "C4", "C4 Cactus", "C5 Aircross", "C5 X", "Berlingo"],
+        "Cupra": ["Ateca", "Born", "Formentor", "Leon"],
+        "Dacia": ["Duster", "Jogger", "Logan", "Sandero", "Spring"],
+        "Dodge": ["Challenger", "Charger", "Durango", "Ram"],
+        "Ferrari": ["296 GTB", "812 Superfast", "F8 Tributo", "Portofino", "Roma", "SF90 Stradale", "Purosangue"],
+        "Fiat": ["500", "500X", "Panda", "Tipo", "Ducato"],
+        "Ford": ["Bronco", "Edge", "Explorer", "Fiesta", "Focus", "Kuga", "Mustang", "Mustang Mach-E", "Puma", "Ranger"],
+        "Honda": ["Accord", "Civic", "CR-V", "HR-V", "Jazz"],
+        "Hyundai": ["Elantra", "i10", "i20", "i30", "Kona", "Santa Fe", "Tucson", "IONIQ 5", "IONIQ 6"],
+        "Infiniti": ["Q50", "Q60", "QX50", "QX60", "QX80"],
+        "Jaguar": ["E-PACE", "F-PACE", "F-TYPE", "I-PACE", "XE", "XF"],
+        "Jeep": ["Avenger", "Compass", "Grand Cherokee", "Renegade", "Wrangler"],
+        "Kia": ["Ceed", "EV6", "Niro", "Picanto", "Rio", "Sorento", "Sportage", "Stinger", "XCeed"],
+        "Lamborghini": ["Aventador", "Huracán", "Urus"],
+        "Land Rover": ["Defender", "Discovery", "Discovery Sport", "Range Rover", "Range Rover Evoque", "Range Rover Sport", "Range Rover Velar"],
+        "Lexus": ["CT", "ES", "IS", "LC", "LS", "NX", "RX", "UX"],
+        "Maserati": ["Ghibli", "Grecale", "Levante", "MC20", "Quattroporte"],
+        "Mazda": ["Mazda2", "Mazda3", "Mazda6", "CX-3", "CX-30", "CX-5", "CX-60", "MX-5"],
+        "Mercedes-Benz": ["Klasa A", "Klasa B", "Klasa C", "Klasa E", "Klasa G", "Klasa S", "GLA", "GLB", "GLC", "GLE", "GLS", "EQA", "EQB", "EQC", "EQE", "EQS"],
+        "MINI": ["Cooper", "Clubman", "Countryman"],
+        "Mitsubishi": ["ASX", "Colt", "Eclipse Cross", "Outlander", "Space Star"],
+        "Nissan": ["Ariya", "Juke", "Leaf", "Micra", "Qashqai", "X-Trail"],
+        "Opel": ["Astra", "Corsa", "Crossland", "Grandland", "Mokka", "Insignia"],
+        "Peugeot": ["208", "2008", "308", "3008", "408", "508", "5008"],
+        "Porsche": ["718 Boxster", "718 Cayman", "911", "Cayenne", "Macan", "Panamera", "Taycan"],
+        "Renault": ["Arkana", "Austral", "Captur", "Clio", "Kangoo", "Megane", "Zoe"],
+        "SEAT": ["Arona", "Ateca", "Ibiza", "Leon", "Tarraco"],
+        "Skoda": ["Enyaq iV", "Fabia", "Kamiq", "Karoq", "Kodiaq", "Octavia", "Scala", "Superb"],
+        "Subaru": ["BRZ", "Crosstrek", "Forester", "Impreza", "Outback"],
+        "Suzuki": ["Across", "Ignis", "S-Cross", "Swace", "Swift", "Vitara"],
+        "Tesla": ["Model 3", "Model S", "Model X", "Model Y"],
+        "Toyota": ["Aygo X", "bZ4X", "C-HR", "Camry", "Corolla", "Highlander", "Hilux", "Prius", "RAV4", "Yaris", "Yaris Cross"],
+        "Volkswagen": ["Arteon", "Caddy", "Golf", "ID.3", "ID.4", "ID.5", "ID. Buzz", "Passat", "Polo", "T-Cross", "T-Roc", "Tiguan", "Touareg"],
+        "Volvo": ["C40 Recharge", "EX30", "EX90", "S60", "S90", "V60", "V90", "XC40", "XC60", "XC90"],
+        "Bugatti": ["Chiron", "Veyron", "Divo"],
+        "Buick": ["Enclave", "Encore", "Envision"],
+        "Cadillac": ["Escalade", "CT4", "CT5", "XT4", "XT5", "XT6"],
+        "DS Automobiles": ["DS 3", "DS 4", "DS 7", "DS 9"],
+        "GMC": ["Sierra", "Canyon", "Yukon", "Acadia", "Terrain"],
+        "Isuzu": ["D-Max"],
+        "Lada": ["Niva", "Vesta", "Granta"],
+        "Lancia": ["Ypsilon", "Delta", "Thema"],
+        "Lincoln": ["Navigator", "Aviator", "Corsair", "Nautilus"],
+        "Maybach": ["Klasa S", "GLS"],
+        "McLaren": ["720S", "Artura", "GT", "Senna", "750S"],
+        "MG": ["ZS", "HS", "MG4", "MG5"],
+        "Polestar": ["Polestar 2", "Polestar 3", "Polestar 4"],
+        "RAM": ["1500", "2500", "3500"],
+        "Rolls-Royce": ["Phantom", "Ghost", "Cullinan", "Spectre", "Wraith"],
+        "Saab": ["9-3", "9-5"],
+        "Smart": ["Fortwo", "Forfour", "#1", "#3"],
+        "SsangYong": ["Tivoli", "Korando", "Rexton", "Musso", "Torres"]
+    };
 
-input.addEventListener("change", () => {
-    preview.innerHTML = "";
-    Array.from(input.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            const div = document.createElement("div");
-            div.className = "position-relative";
-            div.innerHTML = `
-                <img src="${e.target.result}"
-                     class="rounded shadow"
-                     style="width:150px;height:100px;object-fit:cover;">
-            `;
-            preview.appendChild(div);
-        };
-        reader.readAsDataURL(file);
+const brandSelect = document.getElementById("brandSelect");
+const modelSelect = document.getElementById("modelSelect");
+const customBrandInput = document.getElementById("customBrandInput");
+const modelInput = document.getElementById("modelInput");
+
+const currentBrand = "{{ car.brand }}";
+const currentModel = "{{ car.model }}";
+
+function updateForm(brand) {
+
+    if (!carModels[brand]) {
+        brandSelect.removeAttribute("name");
+
+        customBrandInput.classList.remove("d-none");
+        customBrandInput.disabled = false;
+        customBrandInput.setAttribute("name", "brand");
+
+        modelSelect.classList.add("d-none");
+        modelSelect.removeAttribute("name");
+
+        modelInput.classList.remove("d-none");
+        modelInput.disabled = false;
+        modelInput.setAttribute("name", "model");
+
+        return;
+    }
+
+    brandSelect.setAttribute("name", "brand");
+
+    customBrandInput.classList.add("d-none");
+    customBrandInput.disabled = true;
+    customBrandInput.removeAttribute("name");
+
+    modelInput.classList.add("d-none");
+    modelInput.disabled = true;
+    modelInput.removeAttribute("name");
+
+    modelSelect.classList.remove("d-none");
+    modelSelect.setAttribute("name", "model");
+
+    modelSelect.innerHTML = "";
+
+    carModels[brand].forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = m;
+
+        if (m === currentModel) opt.selected = true;
+
+        modelSelect.appendChild(opt);
     });
+}
+
+brandSelect.addEventListener("change", () => {
+    updateForm(brandSelect.value);
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+
+    // ustawienie aktualnej marki
+    if (carModels[currentBrand]) {
+        brandSelect.value = currentBrand;
+    } else {
+        brandSelect.value = "Inna";
+    }
+
+    updateForm(currentBrand);
 });
 </script>
 

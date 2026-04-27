@@ -18,6 +18,7 @@ import os
 from fastapi.staticfiles import StaticFiles
 from typing import List
 import shutil
+from rabbitmq_utils import send_to_queue
 
 # ------------------------
 # KONFIGURACJA
@@ -88,6 +89,7 @@ class Car(Base):
     model = Column(String(100))
     fuel = Column(String(50))
     engine = Column(String(50))
+    condition = Column(String(50))
 
     description = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -244,11 +246,11 @@ def login_page(request: Request):
     if user and role:
         if role == "admin":
             return RedirectResponse(url="/admin")
-        return RedirectResponse(url="/home")
+        return RedirectResponse(url="/seller")
 
     return templates.TemplateResponse("login.html", {"request": request, "error": ""})
 
-
+"""
 @app.post("/login", response_class=HTMLResponse)
 def login(
     request: Request,
@@ -325,6 +327,81 @@ def login(
     if user.role == RoleEnum.admin:
         return RedirectResponse(url="/admin", status_code=302)
     return RedirectResponse(url="/seller", status_code=302)
+
+"""
+
+@app.post("/login", response_class=HTMLResponse)
+def login(
+    request: Request,
+    username: str = Form(...),
+    password: str = Form(...),
+    screen_width: int = Form(None),
+    screen_height: int = Form(None),
+    timezone: str = Form(None),
+    user_agent: str = Form(None),
+):
+    db: Session = SessionLocal()
+
+    try:
+        # 🔹 IP użytkownika
+        #ip = request.client.host
+        ip = "37.47.198.53"
+
+        # 🔹 (opcjonalnie) geolokalizacja — możesz podpiąć własną funkcję
+        """
+        city = None
+        region = None
+        country = None
+        """
+
+        city, region, country = get_geo(ip)
+
+        # 🔹 pobranie usera z bazy
+        user = db.query(User).filter(User.username == username).first()
+
+        # ❌ błędne dane logowania
+        if not user or not pwd_context.verify(password, user.password):
+            record_attempt(db, username, ip, success=False)
+
+            return templates.TemplateResponse(
+                "login.html",
+                {
+                    "request": request,
+                    "error": "Niepoprawne dane logowania."
+                },
+            )
+
+        # ✅ SUKCES LOGOWANIA
+        record_attempt(db, username, ip, success=True)
+
+        # 🔹 wiadomość do RabbitMQ
+        message = {
+            "username": username,
+            "ip_address": ip,
+            "city": city,
+            "region": region,
+            "country": country,
+            "screen_width": screen_width,
+            "screen_height": screen_height,
+            "timezone": timezone,
+            "user_agent": user_agent,
+            "created_at": datetime.utcnow().isoformat()
+        }
+
+        send_to_queue("login_metadata", message)
+
+        # 🔹 sesja
+        request.session["user"] = username
+        request.session["role"] = user.role
+
+        # 🔹 redirect
+        if user.role == RoleEnum.admin:
+            return RedirectResponse(url="/admin", status_code=302)
+
+        return RedirectResponse(url="/seller", status_code=302)
+
+    finally:
+        db.close()
 
 
 @app.get("/register", response_class=HTMLResponse)
@@ -632,6 +709,7 @@ def seller_add_car(
     fuel: str = Form(...),
     engine: str = Form(...),
     description: str = Form(...),
+    condition: str = Form(...),
     images: List[UploadFile] = File(default=[])  # <- opcjonalne, lista
 ):
     auth = require_auth(request)
@@ -660,7 +738,8 @@ def seller_add_car(
         fuel=fuel,
         engine=engine,
         description=description,
-        user_id=user.id
+        user_id=user.id,
+        condition=condition
     )
 
     db.add(car)
@@ -750,6 +829,7 @@ def seller_edit_car(
         model: str = Form(...),
         fuel: str = Form(...),
         engine: str = Form(...),
+        condition:str = Form(...),
         description: str = Form(...),
         images: list[UploadFile] = File([])  # nowe zdjęcia
 ):
@@ -776,6 +856,7 @@ def seller_edit_car(
         car.model = model
         car.fuel = fuel
         car.engine = engine
+        car.condition = condition
         car.description = description
 
         db.add(car)
