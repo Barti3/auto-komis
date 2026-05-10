@@ -40,6 +40,7 @@ CREATE TABLE `cars` (
   `description` text,
   `created_at` datetime DEFAULT NULL,
   `user_id` int NOT NULL
+  `condition` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
