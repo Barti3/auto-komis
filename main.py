@@ -786,20 +786,40 @@ def car_view(car_id: int, request: Request):
 @app.get("/car/{car_id}")
 def car_view(car_id: int, request: Request):
     db = SessionLocal()
-	auth = require_auth(request)
-    car = db.query(Car).options(joinedload(Car.images)).filter(Car.id == car_id).first()
-	current_user_id = None
-    role = None  # <-- dodajemy domyślnie
-	if auth:
-		user = db.query(User).filter(User.username == auth["user"]).first()
-        if user:
-            current_user_id = user.id
-        role = auth.get("role")  # <-- bezpiecznie, nawet jeśli auth jest None
-    db.close()
-    if not car:
-        raise HTTPException(status_code=404, detail="Samochód nie znaleziony")
-    return templates.TemplateResponse("car.html", {"request": request, "car": car, "current_user_id": current_user_id, "is_logged": auth is not None, "role": role})
+    try:
+        auth = require_auth(request)
 
+        car = (
+            db.query(Car)
+            .options(joinedload(Car.images))
+            .filter(Car.id == car_id)
+            .first()
+        )
+
+        current_user_id = None
+        role = None
+
+        if auth:
+            user = db.query(User).filter(User.username == auth["user"]).first()
+            if user:
+                current_user_id = user.id
+            role = auth.get("role")
+
+        if not car:
+            raise HTTPException(status_code=404, detail="Samochód nie znaleziony")
+
+        return templates.TemplateResponse(
+            "car.html",
+            {
+                "request": request,
+                "car": car,
+                "current_user_id": current_user_id,
+                "is_logged": auth is not None,
+                "role": role,
+            },
+        )
+    finally:
+        db.close()
 @app.get("/seller/car/{car_id}/edit/")
 def seller_edit_car_view(request: Request, car_id: int):
     auth = require_auth(request)
