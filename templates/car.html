@@ -120,7 +120,13 @@
     </style>
 </head>
 <body>
-{% include "nav_public.html" %}
+{% if is_logged and role == 'seller' %}
+    {% include "nav_seller.html" %}
+{% elif is_logged and role == 'admin' %}
+    {% include "nav_admin.html" %}
+{% else %}
+    {% include "nav_public.html" %}
+{% endif %}
 <div class="car-container">
     <h1>{{ car.title }}</h1>
 
