@@ -773,7 +773,7 @@ def seller_add_car(
 
     return RedirectResponse(url=f"/car/{car_id}", status_code=303)
 
-
+"""
 @app.get("/car/{car_id}")
 def car_view(car_id: int, request: Request):
     db = SessionLocal()
@@ -782,7 +782,25 @@ def car_view(car_id: int, request: Request):
     if not car:
         raise HTTPException(status_code=404, detail="Samochód nie znaleziony")
     return templates.TemplateResponse("car.html", {"request": request, "car": car})
-
+"""
+@app.get("/car/{car_id}")
+def car_view(car_id: int, request: Request):
+	auth = require_auth(request)
+    db = SessionLocal()
+    car = db.query(Car).options(joinedload(Car.images)).filter(Car.id == car_id).first()
+	current_user_id = None
+    role = None  # <-- dodajemy domyślnie
+	if auth:
+		user = db.query(User).filter(User.username == auth["user"]).first()
+        if user:
+            current_user_id = user.id
+        role = auth.get("role")  # <-- bezpiecznie, nawet jeśli auth jest None
+    db.close()
+    if not car:
+        raise HTTPException(status_code=404, detail="Samochód nie znaleziony")
+    return templates.TemplateResponse("car.html", {"request": request, "car": car, "current_user_id": current_user_id,
+            "is_logged": auth is not None,  # True/False
+            "role": role})
 
 @app.get("/seller/car/{car_id}/edit/")
 def seller_edit_car_view(request: Request, car_id: int):
