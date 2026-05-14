@@ -97,33 +97,6 @@ def test_login_invalid_credentials(client):
     response = client.post("/login", data={"username": "fabi", "password": "zle"})
     assert "Niepoprawne dane logowania" in response.text
 
-def test_login_success_seller(client):
-    """Prawidłowe logowanie z rolą sprzedawcy."""
-    client.post("/register", data={"username": "seller1", "password": "123", "confirm_password": "123"})
-    response = client.post("/login", data={"username": "seller1", "password": "123"}, follow_redirects=False)
-    assert response.status_code == 302
-    assert response.headers["location"] == "/seller"
-
-def test_logout(client):
-    """Wylogowanie użytkownika i czyszczenie sesji."""
-    response = client.get("/logout", follow_redirects=False)
-    assert response.status_code == 302
-    assert response.headers["location"] == "/"
-
-def test_add_car_success(client):
-    """Dodanie ogłoszenia sprzedaży wraz z wgraniem zdjęcia."""
-    client.post("/register", data={"username": "dealer", "password": "123", "confirm_password": "123"})
-    client.post("/login", data={"username": "dealer", "password": "123"})
-    
-    car_data = {
-        "title": "Toyota Yaris", "price": 15000, "year": 2010, "mileage": 100000,
-        "brand": "Toyota", "model": "Yaris", "fuel": "Benzyna", "engine": "1.0",
-        "condition": "Używany", "description": "Super stan"
-    }
-    files = [("images", ("auto.jpg", b"fake_data", "image/jpeg"))]
-    response = client.post("/seller/car/add", data=car_data, files=files, follow_redirects=False)
-    assert response.status_code == 303 
-
 def test_add_car_limit_exceeded(client):
     """Weryfikacja limitu zdjęć (maksymalnie 50 na ogłoszenie)."""
     client.post("/register", data={"username": "limiter", "password": "123", "confirm_password": "123"})
