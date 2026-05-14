@@ -104,9 +104,9 @@
                     <div class="card-title">{{ car.title }}</div>
 
                     <div class="card-meta">
-                        {{ car.year }} • {{ car.mileage }} km
+                        {{ car.price }} zł • {{ car.year }} • {{ car.mileage }} km
                         {% if car.engine %} 
-                            • {{ car.engine }} cm<sup>3</sup> • {{ car.price }} zł
+                            • {{ car.engine }} cm<sup>3</sup> • {{ car.fuel }}
                         {% endif %}
                     </div>
 
