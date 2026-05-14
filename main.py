@@ -404,7 +404,7 @@ def login(
         db.close()
 
 
-@app.get("/register", response_class=HTMLResponse)
+@app.get("/registerr", response_class=HTMLResponse)
 def register_page(request: Request):
     """Ekran rejestracji nowego użytkownika"""
     return templates.TemplateResponse("register.html", {"request": request, "error": ""})
