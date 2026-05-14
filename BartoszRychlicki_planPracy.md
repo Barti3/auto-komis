@@ -26,7 +26,7 @@
 6. System kolejkowy (RabbitMQ)
 - implementacja komunikacji asynchronicznej
 - stworzenie procesu typu worker do obsługi komunikatów
-7. Automatyzacja (Jenkins)???
+7. Automatyzacja (Jenkins)
 - przygotowanie pipeline CI obejmującego:
   - budowanie obrazów Docker
   - uruchamianie aplikacji
@@ -38,7 +38,7 @@
 - Nginx
 - Docker, Docker Compose
 - Pytest
-- (Jenkins)???
+- (Jenkins)
 
 ## Rezultat projektu
 Rezultatem projektu będzie działająca aplikacja webowa uruchamiana w środowisku kontenerowym, wraz z pełną konfiguracją infrastruktury (baza danych, system kolejkowy, reverse proxy) oraz zautomatyzowanym procesem budowania i testowania aplikacji.
