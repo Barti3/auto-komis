@@ -1,8 +1,6 @@
 # Temat projektu: 
 ## Konteneryzacja i automatyzacja wdrażania aplikacji webowej z wykorzystaniem Docker, RabbitMQ oraz PyTest
 
-## Zespół: Bartosz Rychlicki, Fabian Popielewski, Grupa 2
-
 # Cel projektu:
 ### Celem projektu jest rozwinięcie istniejącej aplikacji serwisu auto-komisu napisanej w technologii FastAPI poprzez przygotowanie środowiska uruchomieniowego opartego na kontenerach Docker  i automatyzacji procesu budowania oraz testowania aplikacji.
 
