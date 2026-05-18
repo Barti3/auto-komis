@@ -17,7 +17,7 @@ def connect():
             print("Connecting to RabbitMQ...")
             params = pika.URLParameters(RABBITMQ_URL)
             connection = pika.BlockingConnection(params)
-            print("Connected to RabbitMQ ✅")
+            print("Connected to RabbitMQ ")
             return connection
         except pika.exceptions.AMQPConnectionError:
             print("RabbitMQ not ready, retrying in 5s...")
@@ -46,7 +46,7 @@ def callback(ch, method, properties, body):
 
         db.add(metadata)
         db.commit()
-        print("Saved to DB ✅")
+        print("Saved to DB ")
 
     except Exception as e:
         print("Error processing message:", e)
