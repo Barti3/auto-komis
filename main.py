@@ -263,7 +263,7 @@ def login(
 ):
     username = username.strip()
     #ip = get_client_ip(request)
-    # 🔴 TEST – wymuszone publiczne IP
+    # TEST – wymuszone publiczne IP
     ip = "37.47.198.53"
     city, region, country = get_geo(ip)
 
@@ -300,7 +300,7 @@ def login(
             {"request": request, "error": "Niepoprawne dane logowania."},
         )
 
-    # ✅ SUKCES LOGOWANIA
+    # SUKCES LOGOWANIA
     record_attempt(db, username, ip, success=True)
 
     #city, region, country = get_geo_from_ip(ip)
@@ -359,7 +359,7 @@ def login(
         # 🔹 pobranie usera z bazy
         user = db.query(User).filter(User.username == username).first()
 
-        # ❌ błędne dane logowania
+        # błędne dane logowania
         if not user or not pwd_context.verify(password, user.password):
             record_attempt(db, username, ip, success=False)
 
@@ -371,7 +371,7 @@ def login(
                 },
             )
 
-        # ✅ SUKCES LOGOWANIA
+        # SUKCES LOGOWANIA
         record_attempt(db, username, ip, success=True)
 
         # 🔹 wiadomość do RabbitMQ
@@ -512,7 +512,7 @@ def admin_delete_user(user_id: int, request: Request):
         db.close()
         raise HTTPException(status_code=403, detail="Nie można usuwać adminów")
 
-    # ✅ usuń wszystkie samochody użytkownika
+    # usuń wszystkie samochody użytkownika
     user_cars = db.query(Car).filter(Car.user_id == user_id).all()
     for car in user_cars:
         # usuń zdjęcia z dysku
@@ -899,7 +899,7 @@ def seller_edit_car(
         db.commit()
         db.refresh(car)
 
-        car_id_to_redirect = car.id  # ✅ przed zamknięciem sesji
+        car_id_to_redirect = car.id  # przed zamknięciem sesji
 
         # --- Obsługa nowych zdjęć ---
         if images:
